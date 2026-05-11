@@ -14,7 +14,7 @@ import seaborn as sns
 import warnings
 warnings.filterwarnings("ignore")
 
-# ─── Styling ──────────────────────────────────────────────────────────────────
+# Styling
 
 COLORS = {"control": "#6B7280", "treatment": "#3B82F6"}
 PALETTE = ["#6B7280", "#3B82F6"]
@@ -32,7 +32,7 @@ plt.rcParams.update({
 })
 
 
-# ─── 1. Data Loading & Cleaning ───────────────────────────────────────────────
+#  Data Loading & Cleaning
 
 def load_data(filepath: str) -> pd.DataFrame:
     """Load CSV and parse timestamps."""
@@ -69,12 +69,12 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     df = df[valid_mask].reset_index(drop=True)
     final = len(df)
 
-    print("── Data Cleaning Summary ──────────────────────")
+   
     print(f"  Original rows       : {original:>10,}")
     print(f"  After dedup         : {after_dedup:>10,}  (-{original - after_dedup:,})")
     print(f"  After single-group  : {after_single_group:>10,}  (-{after_dedup - after_single_group:,})")
     print(f"  After page fix      : {final:>10,}  (-{after_single_group - final:,})")
-    print("───────────────────────────────────────────────")
+  
     return df
 
 
@@ -93,7 +93,7 @@ def check_sample_ratio_mismatch(df: pd.DataFrame, tolerance: float = 0.01) -> bo
     return srm_ok
 
 
-# ─── 2. EDA ───────────────────────────────────────────────────────────────────
+#  EDA 
 
 def conversion_summary(df: pd.DataFrame) -> pd.DataFrame:
     """Return a summary DataFrame of conversion stats per group."""
@@ -167,8 +167,7 @@ def plot_daily_conversions(df: pd.DataFrame, save_path: str = None):
     plt.show()
 
 
-# ─── 3. Hypothesis Testing ────────────────────────────────────────────────────
-
+# Hypothesis Testing
 def run_z_test(df: pd.DataFrame, alpha: float = 0.05) -> dict:
     """
     One-tailed two-proportion z-test.
@@ -222,9 +221,9 @@ def print_results(results: dict):
     verdict = "REJECT H₀ — statistically significant" if results["significant"] \
               else "FAIL TO REJECT H₀ — not statistically significant"
 
-    print("\n══════════════════════════════════════════════")
+ 
     print("  A/B TEST RESULTS")
-    print("══════════════════════════════════════════════")
+  
     print(f"  Control conversion rate   : {results['p_control']*100:.3f}%  (n={results['n_control']:,})")
     print(f"  Treatment conversion rate : {results['p_treatment']*100:.3f}%  (n={results['n_treatment']:,})")
     print(f"  Absolute difference       : {results['absolute_diff']*100:+.3f} pp")
@@ -234,7 +233,7 @@ def print_results(results: dict):
     print(f"  P-value (one-tailed)      : {results['p_value']:.4f}")
     print(f"  Significance level (α)    : {results['alpha']}")
     print(f"  Decision                  : {verdict}")
-    print("══════════════════════════════════════════════\n")
+  
 
 
 def plot_z_distribution(results: dict, save_path: str = None):
@@ -272,7 +271,7 @@ def plot_z_distribution(results: dict, save_path: str = None):
     plt.show()
 
 
-# ─── 4. Power Analysis ────────────────────────────────────────────────────────
+#  Power Analysis
 
 def minimum_sample_size(p_baseline: float, mde: float, alpha: float = 0.05, power: float = 0.80) -> int:
     """
